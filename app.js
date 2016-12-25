@@ -24,6 +24,7 @@ require('./models/workout');
 //Routes
 var auth = require('./routes/auth')(passport);
 var test = require('./routes/test');
+var api = require('./routes/api');
 
 // view engine setup
 app.set('views', path.join(__dirname, 'views'));
@@ -50,6 +51,8 @@ app.use(flash());
 //Routing
 app.use('/auth', auth);
 app.use('/test', test);
+app.use('/api', api);
+
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
