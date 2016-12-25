@@ -9,8 +9,8 @@ router.route('/')
         User.findById(req.user._id)
             .populate('routines')
             .exec(function(err, user){
-                if(err) return res.send(500, err);
-                return res.send(200, user.routines);
+                if(err) return res.status(500).send(err);
+                return res.send(user.routines);
             });
     })
     .post(function(req, res){
@@ -20,12 +20,12 @@ router.route('/')
         routine.exercises = req.body.exercises;
 
         routine.save(function(err, routine){
-            if(err) return res.send(500, err);
+            if(err) return res.status(500).send(err);
             User.findById(req.user._id, function(err, user){
-                if(err) return res.send(err);
+                if(err) return res.status(500).send(err);
                 user.routines.push(routine._id);
                 user.save(function(err){
-                    if(err) return res.send(500, err);
+                    if(err) return res.status(500).send(err);
                     return res.json(routine);
                 });
             });
@@ -36,13 +36,13 @@ router.route('/')
 function validate(req, res, next){
     Routine.count({_id: req.params.id}, function(err, count){
         if(err) {
-            return res.send(500, err);
+            return res.status(500).send(err);
         }
         if(count == 0) {
-            return res.send(200, 'Routine does not exist');
+            return res.send('Routine does not exist');
         }
         if(req.user.routines.indexOf(req.params.id) == -1){
-            return res.send(200, 'Not authorized');
+            return res.send('Not authorized');
         }
         return next();
     });
@@ -55,32 +55,32 @@ router.route('/:id')
         Routine.findById(req.params.id)
             .populate('exercises')
             .exec(function(err, routine){
-                if(err) return res.send(500, err);
-                return res.send(200, routine);
+                if(err) return res.status(500).send(err);
+                return res.send(routine);
             });
     })
     .put(function(req, res){
         Routine.findById(req.params.id, function(err, routine){
-            if(err) return res.send(500, err);
+            if(err) return res.status(500).send(err);
             routine = req.body.routine;
             routine.save(function(err, routine){
-                if(err) return res.send(500, err);
-                return res.send(200, routine);
+                if(err) return res.status(500).send(err);
+                return res.send(routine);
             });
         });
     })
     .delete(function(req, res){
         Routine.remove({_id: req.params.id}, function(err){
-            if(err) return res.send(500, err);
+            if(err) return res.status(500).send(err);
             User.findById(req.user._id, function(err, user){
-                if(err) return req.send(500, err);
+                if(err) return res.status(500).send(err);
                 var index = user.routines.indexOf(req.params.id);
                 if(index > -1){
                     user.routines.splice(index, 1);
                 }
                 user.save(function(err){
-                    if(err) return res.send(500, err);
-                    return res.send(200, 'Deleted: ' + req.params.id);
+                    if(err) return res.status(500).send(err);
+                    return res.send('Deleted: ' + req.params.id);
                 });
             });
         });

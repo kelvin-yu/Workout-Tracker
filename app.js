@@ -34,7 +34,9 @@ app.set('view engine', 'ejs');
 //app.use(favicon(path.join(__dirname, 'public', 'favicon.ico')));
 app.use(logger('dev'));
 app.use(session({
-  secret : secrets.sessionSecret
+  secret : secrets.sessionSecret,
+  resave : true,
+  saveUninitialized: false
 }));
 
 app.use(bodyParser.json());
@@ -52,7 +54,6 @@ app.use(flash());
 app.use('/auth', auth);
 app.use('/test', test);
 app.use('/api', api);
-
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {

@@ -17,7 +17,8 @@ var UserSchema = new mongoose.Schema({
     },
     name: String,
     routines: [{type: mongoose.Schema.Types.ObjectId, ref: 'Routine'}],
-    workouts: [{type: mongoose.Schema.Types.ObjectId, ref: 'Workout'}]
+    workouts: [{type: mongoose.Schema.Types.ObjectId, ref: 'Workout'}],
+    exercises: [{type: mongoose.Schema.Types.ObjectId, ref: 'Exercise'}]
 });
 
 //Before saving a user hash/rehash password
