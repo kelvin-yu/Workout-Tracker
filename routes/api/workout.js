@@ -18,7 +18,7 @@ router.route('/')
         var workout = new Workout();
         workout.creator = req.user.name;
         workout.routine = req.body.routine;
-        workout.worked_exercises= req.body.worked_exercises;
+        workout.worked_exercises = req.body.worked_exercises;
 
         workout.save(function(err, workout){
             if(err) return res.status(500).send(err);
@@ -71,7 +71,9 @@ router.route('/:id')
         });
     })
     .delete(function(req, res){
-
+		//1. delete all related worked_exercises
+		//2. delete workout
+		//3. delete workout_id from user
         Workout.findById(req.params.id, function(err, workout){
             if(err) return res.status(500).send(err);
             for(var i = 0; i < workout.worked_exercises.length; i++){
