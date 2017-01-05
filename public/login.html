@@ -1,0 +1,8 @@
+<a href="#/signup">Register</a>
+<form ng-submit="login()">
+	<h2>Log in</h2>
+	<p>{{error_message}}</p>
+	<input type="username" ng-model="user.username" placeholder="Username" ><br>
+	<input type="password" ng-model="user.password" placeholder="Password" ><br>
+	<input type="submit" value="Log in" />
+</form>

@@ -4,6 +4,7 @@ var router = express.Router();
 module.exports = function(passport){
 
     router.get('/success', function(req, res){
+		console.log("user" + req.user);
         res.send({state: 'success', user: req.user ? req.user : null});
     });
 

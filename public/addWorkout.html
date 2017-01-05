@@ -1,0 +1,7 @@
+<form ng-submit="post()">
+	<h2>Add Workout</h2>
+	<p>{{error.message}}</p>		
+	<select ng-model="selectedRoutine" ng-options="routine.title for routine in routines">
+	</select>
+	<input type="submit" value="Add workout" />
+</form>

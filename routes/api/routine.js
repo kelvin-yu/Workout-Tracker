@@ -14,12 +14,14 @@ router.route('/')
             });
     })
     .post(function(req, res){
+		console.log(req.body);
         var routine = new Routine();
         routine.creator = req.user.name;
         routine.title = req.body.title;
         routine.exercises = req.body.exercises;
-
+		console.log('made it' + routine);
         routine.save(function(err, routine){
+			console.log(err);
             if(err) return res.status(500).send(err);
             User.findById(req.user._id, function(err, user){
                 if(err) return res.status(500).send(err);

@@ -23,8 +23,8 @@ require('./models/workout');
 
 //Routes
 var auth = require('./routes/auth')(passport);
-var test = require('./routes/test');
 var api = require('./routes/api');
+var index = require('./routes/index');
 
 // view engine setup
 app.set('views', path.join(__dirname, 'views'));
@@ -38,13 +38,10 @@ app.use(session({
   resave : true,
   saveUninitialized: false
 }));
-
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(cookieParser());
-//Cache static content for one day
-var oneDay = 86400000;
-app.use(express.static(path.join(__dirname, 'public'), {maxAge: oneDay}));
+app.use(express.static(path.join(__dirname, 'public')));
 app.use(compression());
 app.use(passport.initialize());
 app.use(passport.session());
@@ -52,8 +49,8 @@ app.use(flash());
 
 //Routing
 app.use('/auth', auth);
-app.use('/test', test);
 app.use('/api', api);
+app.use('/', index);
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
@@ -88,6 +85,5 @@ app.use(function(err, req, res, next) {
     error: {}
   });
 });
-
 
 module.exports = app;
