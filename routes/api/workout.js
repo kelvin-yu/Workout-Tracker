@@ -40,10 +40,10 @@ function validate(req, res, next){
             return res.status(500).send(err);
         }
         if(count == 0) {
-            return res.send('Workout does not exist');
+            return res.status(500).send('Workout does not exist');
         }
         if(req.user.workouts.indexOf(req.params.id) == -1){
-            return res.send('Not authorized');
+            return res.status(403).send('Not authorized');
         }
         return next();
     });

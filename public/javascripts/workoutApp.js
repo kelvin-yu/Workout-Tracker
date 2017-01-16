@@ -1,45 +1,129 @@
-var app = angular.module('workoutApp', ['ngRoute', 'ngResource']).run(function($rootScope, $http){
-	$rootScope.user = {};
-    $rootScope.authenticated = false;
-
+var app = angular.module('workoutApp', ['ngRoute', 'ngResource', 'ngCookies']);
+	
+app.run(function($rootScope, $http, $location, $route){
     $rootScope.logout = function(){
-        $http.get("/auth/logout");
-        $rootScope.authenticated = false;
-		$rootScope.current_user = {};
+        $http.get("/auth/logout").then(function(response){
+			$location.path('/');
+			$route.reload();
+		});
     };
 });
 
-app.config(function($routeProvider){
+app.config(function($routeProvider, $locationProvider, $httpProvider){
+	$httpProvider.interceptors.push(function($q, $location){
+		return {
+			response : function(response){
+				return response;
+			},
+			responseError : function(response){
+				console.log('xd');
+				if(response.status === 401){
+					$location.path('/login');
+				}
+				return $q.reject(response);
+			}
+		};
+	});
+
+	$locationProvider.html5Mode({
+	  enabled: true,
+	  requireBase: false
+	});
+
+	var blockUnauth = function($q, $http, $location){
+		var deferred = $q.defer();
+		$http.get('/auth/loggedin').then(function(isLoggedIn){
+			if(isLoggedIn.data){
+				deferred.resolve();
+			}
+			else{
+				deferred.reject();		
+				$location.path('/login');
+			}
+		});
+		return deferred.promise;
+	};
+
+	var blockAuth = function($q, $http, $location){
+		var deferred = $q.defer();
+		$http.get('/auth/loggedin').then(function(isLoggedIn){
+			if(isLoggedIn.data){
+				$location.path('/');
+				deferred.reject();
+			}
+			else{
+				deferred.resolve();		
+			}
+		});
+		return deferred.promise;
+	};
+
     $routeProvider
         .when('/', {
             templateUrl: 'main.html',
-            controller: 'mainController'
+            controller: 'mainController',
+			resolve: {
+				loggedin :blockUnauth
+			}
         })
 		.when('/login', {
 			templateUrl: 'login.html',
-			controller: 'authController'
+			controller: 'authController',
+			resolve: {
+				loggedin: blockAuth
+			}
 		})
 		.when('/signup', {
 			templateUrl: 'signup.html',
-			controller: 'authController'
+			controller: 'authController',
+			resolve: {
+				loggedin: blockAuth
+			}
 		})
 		.when('/routines', {
-			templateUrl: 'routines.html',
-			controller: 'routineController'
+			templateUrl: 'routine_views/routines.html',
+			controller: 'routineController',
+			resolve: {
+				loggedin : blockUnauth
+			}
 		})
 		.when('/workouts', {
-			templateUrl: 'workouts.html',
-			controller: 'workoutController'
+			templateUrl: 'workout_views/workouts.html',
+			controller: 'workoutController',
+			resolve: {
+				loggedin :blockUnauth
+			}
+		})
+		.when('/exercises', {
+			templateUrl: 'exercise_views/exercises.html',
+			controller: 'exerciseController',
+			resolve: {
+				loggedin :blockUnauth
+			}
 		})
 		.when('/addRoutine', {
-			templateUrl: 'addRoutine.html',
-			controller: 'routineController'
+			templateUrl: 'routine_views/addRoutine.html',
+			controller: 'routineController',
+			resolve: {
+				loggedin :blockUnauth
+			}
 		})
 		.when('/addWorkout', {
-			templateUrl: 'addWorkout.html',
-			controller: 'workoutController'
+			templateUrl: 'workout_views/addWorkout.html',
+			controller: 'workoutController',
+			resolve: {
+				loggedin :blockUnauth
+			}
+		})
+		.when('/addExercise', {
+			templateUrl: 'exercise_views/addExercise.html',
+			controller: 'exerciseController',
+			resolve: {
+				loggedin :blockUnauth
+			}
 		});
 });
+
 
 app.factory('routineService', function($resource){
 	return $resource('/api/routine/:id');
@@ -53,71 +137,28 @@ app.factory('exerciseService', function($resource){
 	return $resource('/api/exercise/:id');
 });
 
-app.controller('mainController', function($http, $location, $rootScope, $scope, routineService, workoutService){
-    $scope.init = function(){
-        if(!$rootScope.authenticated){
-            $location.path('/login');
-        }
-    };
-    $scope.init();
-	$scope.user = $rootScope.current_user;
-	$scope.routines = routineService.query();
-	$scope.workouts = workoutService.query();
-});
-
-app.controller('routineController', function($location, $http, $scope, routineService, $rootScope){
-	$scope.newRoutine = {title:''};
-	$scope.routines = routineService.query();
-	$scope.post = function(){
-		console.log($scope.newRoutine);
-		routineService.save($scope.newRoutine, function(){
-			$scope.routines = routineService.query();
-			$location.path('/');
-		});
-	};
-});
-
-app.controller('workoutController', function($location, $scope, workoutService, routineService){
-	$scope.newWorkout = {routine:''};
-	$scope.selectedRoutine = '';
-	$scope.workouts = workoutService.query();
-	$scope.routines = routineService.query();
-	console.log($scope.routines);
-	$scope.post = function(){
-
-		$scope.newWorkout.routine = $scope.selectedRoutine._id;
-		workoutService.save($scope.newWorkout, function(){
-			$location.path('/');	
-		});
-	};
-});
-
-app.controller('authController', function($scope, $http, $rootScope, $location){
+app.controller('authController', function($scope, $http, $location){
   $scope.user = {username: '', password: '', name: ''};
   $scope.error_message = '';
 
   $scope.login = function(){
-    $http.post('/auth/login', $scope.user).success(function(data){
-      if(data.state == 'success'){
-        $rootScope.authenticated = true;
-        $rootScope.user = data.user;
+    $http.post('/auth/login', $scope.user).then(function(success){
+      if(success.data.state == 'success'){
         $location.path('/');
       }
       else{
-        $scope.error_message = data.message;
+        $scope.error_message = success.data.message;
       }
-    });
+	});
   };
 
   $scope.signup = function(){
-    $http.post('/auth/signup', $scope.user).success(function(data){
-      if(data.state == 'success'){
-        $rootScope.authenticated = true;
-        $rootScope.user = data.user;
+    $http.post('/auth/signup', $scope.user).then(function(success){
+      if(success.data.state == 'success'){
         $location.path('/');
       }
       else{
-        $scope.error_message = data.message;
+        $scope.error_message = success.data.message;
       }
     });
   };

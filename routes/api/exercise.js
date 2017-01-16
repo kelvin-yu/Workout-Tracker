@@ -40,10 +40,10 @@ function validate(req, res, next){
             return res.status(500).send(err);
         }
         if(count == 0) {
-            return res.send('Exercise does not exist');
+            return res.status(500).send('Exercise does not exist');
         }
         if(req.user.exercises.indexOf(req.params.id) == -1){
-            return res.send('Not authorized');
+            return res.status(403).send('Not authorized');
         }
         return next();
     });
@@ -56,7 +56,7 @@ router.route('/:id')
         Exercise.findById(req.params.id, function(err, exercise) {
             if (err) return res.status(500).send(err);
             return res.send(exercise);
-        })
+        });
     })
     .put(function(req, res){
         Exercise.findById(req.params.id, function(err, exercise){

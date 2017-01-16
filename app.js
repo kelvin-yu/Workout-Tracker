@@ -50,7 +50,7 @@ app.use(flash());
 //Routing
 app.use('/auth', auth);
 app.use('/api', api);
-app.use('/', index);
+app.use('/*', index);
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
