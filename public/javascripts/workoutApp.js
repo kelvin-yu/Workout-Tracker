@@ -1,6 +1,6 @@
 var app = angular.module('workoutApp', ['ngRoute', 'ngResource', 'ngCookies']);
 	
-app.run(function($rootScope, $http, $location, $route){
+app.run(function($rootScope, $http, $location, $route, errorMessageHandler){
 	$rootScope.user = {username:"", password:""};
     $rootScope.logout = function(){
         $http.get("/auth/logout").then(function(response){
@@ -15,10 +15,15 @@ app.run(function($rootScope, $http, $location, $route){
 				$route.reload();
 		 	}
 			else{
-				//TODO: redirect to login page and show error message
-				console.log("todo");
+		errorMessageHandler.push('authError', success.data.message);
+			$location.path('/login');	
+				$route.reload();
 			}
 		});
+	};
+	$rootScope.goHome = function(){
+		$location.path('/');
+		$route.reload();
 	};
 	$rootScope.loggedIn = false;
 });
@@ -161,17 +166,36 @@ app.factory('exerciseService', function($resource){
 	return $resource('/api/exercise/:id');
 });
 
-app.controller('authController', function($scope, $http, $location){
-  $scope.user = {username: '', password: '', name: ''};
-  $scope.error_message = '';
+app.factory('errorMessageHandler', function(){
+	var errorMessage = {};
+	return {
+		push : function(key, message){
+			errorMessage[key] = message;
+		},
+		pop : function(key){
+			if(errorMessage[key]){
+				var message = errorMessage[key];	
+				errorMessage[key] = "";
+				return message;
+			}
+			else{
+				return "";	
+			}
+		}
+	};
+});
 
+app.controller('authController', function($scope, $http, $location, errorMessageHandler){
+  $scope.user = {username: '', password: '', name: ''};
+  $scope.error_message = errorMessageHandler.pop('authError');
   $scope.login = function(){
     $http.post('/auth/login', $scope.user).then(function(success){
       if(success.data.state == 'success'){
         $location.path('/home');
       }
       else{
-        $scope.error_message = success.data.message;
+		errorMessageHandler.push('authError', success.data.message);
+		  $scope.error_message = errorMessageHandler.pop('authError');
       }
 	});
   };
@@ -182,7 +206,8 @@ app.controller('authController', function($scope, $http, $location){
         $location.path('/home');
       }
       else{
-        $scope.error_message = success.data.message;
+		errorMessageHandler.push('authError', success.data.message);
+		  $scope.error_message = errorMessageHandler.pop('authError');
       }
     });
   };
