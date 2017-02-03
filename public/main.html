@@ -1,25 +1,68 @@
-<p>name: {{user.name}}</p>
-<div>
-	<h1><a href="/routines">Routines</a></h1>
-	<ol>
-		<li ng-repeat="routine in routines | orderBy:'created_at':true">
-			{{routine.title}}	
-		</li>	
-	</ol>
+<script>
+var jumboHeight = $('.jumbotron').outerHeight();
+function parallax(){
+    var scrolled = $(window).scrollTop();
+    $('.bg').css('height', (jumboHeight-scrolled) + 'px');
+}
+
+$(window).scroll(function(e){
+    parallax();
+});
+</script>
+<div class="bg"></div>
+<div class="jumbotron" id="main-jumbotron">
+	<div class="container text-center">
+		<h1>TRAIN SMARTER</h1>
+		<p>Improve and reach goals in the gym</p>
+		<a href="/signup" class="btn btn-primary">Register Now</a>
+	</div>
 </div>
-<div>
-	<h1><a href="/workouts">Workouts</a></h1>
-	<ol>
-		<li ng-repeat="workout in workouts | orderBy:'created_at':true">
-			{{workout.created_at}} | {{workout.routine}}	
-		</li>	
-	</ol>
+
+<div class="container">
+  <div class="row">
+    <h2>Create Routines</h2>
+    Lorem ipsum dolor sit amet, consectetur adipiscing elit. Duis pharetra varius quam sit amet vulputate. 
+    Quisque mauris augue, molestie tincidunt condimentum vitae, gravida a libero. Aenean sit amet felis 
+    dolor, in sagittis nisi. Sed ac orci quis tortor imperdiet venenatis. Duis elementum auctor accumsan. 
+    Aliquam in felis sit amet augue.
+    <br>
+    Lorem ipsum dolor sit amet, consectetur adipiscing elit. Duis pharetra varius quam sit amet vulputate. 
+    Quisque mauris augue, molestie tincidunt condimentum vitae, gravida a libero. Aenean sit amet felis 
+    dolor, in sagittis nisi. Sed ac orci quis tortor imperdiet venenatis. Duis elementum auctor accumsan. 
+    Aliquam in felis sit amet augue.
+    <br>
+    Lorem ipsum dolor sit amet, consectetur adipiscing elit. Duis pharetra varius quam sit amet vulputate. 
+    Quisque mauris augue, molestie tincidunt condimentum vitae, gravida a libero. Aenean sit amet felis 
+    dolor, in sagittis nisi. Sed ac orci quis tortor imperdiet venenatis. Duis elementum auctor accumsan. 
+    Aliquam in felis sit amet augue.
+    <br>
+    Lorem ipsum dolor sit amet, consectetur adipiscing elit. Duis pharetra varius quam sit amet vulputate. 
+    Quisque mauris augue, molestie tincidunt condimentum vitae, gravida a libero. Aenean sit amet felis 
+    dolor, in sagittis nisi. Sed ac orci quis tortor imperdiet venenatis. Duis elementum auctor accumsan. 
+    Aliquam in felis sit amet augue.
+  </div>
+  <hr>
+  <div class="row">
+    <h2>Log Workouts</h2>
+    Lorem ipsum dolor sit amet, consectetur adipiscing elit. Duis pharetra varius quam sit amet vulputate. 
+    Quisque mauris augue, molestie tincidunt condimentum vitae, gravida a libero. Aenean sit amet felis 
+    dolor, in sagittis nisi. Sed ac orci quis tortor imperdiet venenatis. Duis elementum auctor accumsan. 
+    Aliquam in felis sit amet augue.
+  </div>
+  <hr>
+  <div class="row">
+    <h2>Learn from Statistics</h2>
+    Lorem ipsum dolor sit amet, consectetur adipiscing elit. Duis pharetra varius quam sit amet vulputate. 
+    Quisque mauris augue, molestie tincidunt condimentum vitae, gravida a libero. Aenean sit amet felis 
+    dolor, in sagittis nisi. Sed ac orci quis tortor imperdiet venenatis. Duis elementum auctor accumsan. 
+    Aliquam in felis sit amet augue.
+  </div>
 </div>
-<div>
-	<h1><a href="/exercises">Exercises</a></h1>
-	<ol>
-		<li ng-repeat="exercise in exercises | orderBy:'created_at':true">
-			{{exercise.name}}
-		</li>
-	</ol>
+
+<hr>
+
+<div class="container">
+	<div class="row">
+      <div class="col-md-12 text-center"><p>The End.</p></div>
+    </div>
 </div>

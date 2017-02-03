@@ -1,12 +1,26 @@
 var app = angular.module('workoutApp', ['ngRoute', 'ngResource', 'ngCookies']);
 	
 app.run(function($rootScope, $http, $location, $route){
+	$rootScope.user = {username:"", password:""};
     $rootScope.logout = function(){
         $http.get("/auth/logout").then(function(response){
 			$location.path('/');
 			$route.reload();
 		});
     };
+	$rootScope.login = function(){
+		$http.post('/auth/login', $rootScope.user).then(function(success){
+			if(success.data.state == 'success'){
+				$location.path('/home');
+				$route.reload();
+		 	}
+			else{
+				//TODO: redirect to login page and show error message
+				console.log("todo");
+			}
+		});
+	};
+	$rootScope.loggedIn = false;
 });
 
 app.config(function($routeProvider, $locationProvider, $httpProvider){
@@ -16,7 +30,6 @@ app.config(function($routeProvider, $locationProvider, $httpProvider){
 				return response;
 			},
 			responseError : function(response){
-				console.log('xd');
 				if(response.status === 401){
 					$location.path('/login');
 				}
@@ -30,13 +43,15 @@ app.config(function($routeProvider, $locationProvider, $httpProvider){
 	  requireBase: false
 	});
 
-	var blockUnauth = function($q, $http, $location){
+	var blockUnauth = function($q, $http, $location, $rootScope){
 		var deferred = $q.defer();
 		$http.get('/auth/loggedin').then(function(isLoggedIn){
 			if(isLoggedIn.data){
+				$rootScope.loggedIn = true;
 				deferred.resolve();
 			}
 			else{
+				$rootScope.loggedIn = false;
 				deferred.reject();		
 				$location.path('/login');
 			}
@@ -44,14 +59,16 @@ app.config(function($routeProvider, $locationProvider, $httpProvider){
 		return deferred.promise;
 	};
 
-	var blockAuth = function($q, $http, $location){
+	var blockAuth = function($q, $http, $location, $rootScope){
 		var deferred = $q.defer();
 		$http.get('/auth/loggedin').then(function(isLoggedIn){
 			if(isLoggedIn.data){
-				$location.path('/');
+				$rootScope.loggedIn = true;
+				$location.path('/home');
 				deferred.reject();
 			}
 			else{
+				$rootScope.loggedIn = false;
 				deferred.resolve();		
 			}
 		});
@@ -63,9 +80,16 @@ app.config(function($routeProvider, $locationProvider, $httpProvider){
             templateUrl: 'main.html',
             controller: 'mainController',
 			resolve: {
-				loggedin :blockUnauth
+				loggedin :blockAuth
 			}
         })
+		.when('/home', {
+            templateUrl: 'home.html',
+            controller: 'homeController',
+			resolve: {
+				loggedin :blockUnauth
+			}
+		})
 		.when('/login', {
 			templateUrl: 'login.html',
 			controller: 'authController',
@@ -144,7 +168,7 @@ app.controller('authController', function($scope, $http, $location){
   $scope.login = function(){
     $http.post('/auth/login', $scope.user).then(function(success){
       if(success.data.state == 'success'){
-        $location.path('/');
+        $location.path('/home');
       }
       else{
         $scope.error_message = success.data.message;
@@ -155,7 +179,7 @@ app.controller('authController', function($scope, $http, $location){
   $scope.signup = function(){
     $http.post('/auth/signup', $scope.user).then(function(success){
       if(success.data.state == 'success'){
-        $location.path('/');
+        $location.path('/home');
       }
       else{
         $scope.error_message = success.data.message;

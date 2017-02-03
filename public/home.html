@@ -1,0 +1,25 @@
+<p>name: {{user.name}}</p>
+<div>
+	<h1><a href="/routines">Routines</a></h1>
+	<ol>
+		<li ng-repeat="routine in routines | orderBy:'created_at':true">
+			{{routine.title}}	
+		</li>	
+	</ol>
+</div>
+<div>
+	<h1><a href="/workouts">Workouts</a></h1>
+	<ol>
+		<li ng-repeat="workout in workouts | orderBy:'created_at':true">
+			{{workout.created_at}} | {{workout.routine}}	
+		</li>	
+	</ol>
+</div>
+<div>
+	<h1><a href="/exercises">Exercises</a></h1>
+	<ol>
+		<li ng-repeat="exercise in exercises | orderBy:'created_at':true">
+			{{exercise.name}}
+		</li>
+	</ol>
+</div>
