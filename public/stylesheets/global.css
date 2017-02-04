@@ -1,0 +1,11 @@
+.navbar{
+	margin: 0px
+}
+img {
+    display: block;
+    margin: 0 auto;
+}
+.btn:focus, .btn:active:focus, .btn.active:focus{
+    outline:none;
+    box-shadow:none;
+}

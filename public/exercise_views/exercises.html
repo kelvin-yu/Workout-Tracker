@@ -1,8 +1,5 @@
-<a  href="/addExercise">add</a>
-<div>
-	<ol>
-		<li ng-repeat="exercise in exercises | orderBy:'created_at':true">
-			{{exercise.name}}
-		</li>
-	</ol>
-</div>
+<ol class="list-group">
+	<li class="list-group-item" ng-repeat="exercise in exercises | orderBy:'created_at':true">
+		{{exercise.name}}
+	</li>
+</ol>

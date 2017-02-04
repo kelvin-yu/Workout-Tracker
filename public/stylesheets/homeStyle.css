@@ -1,0 +1,23 @@
+#home-jumbotron{
+	background-color:#87CEFA;
+	padding : 0;
+	margin : 0;
+}
+
+#profile-img{
+	max-width:400px;
+	max-height:300px;
+  	width: auto;
+  	height: auto;
+}
+
+.select{
+	padding : 0;
+	margin : 0;
+}
+
+#home-jumbotron h1{
+	font-size: 100pt;
+	font-family: 'Open Sans', sans-serif;
+	color: white;
+}

@@ -18,7 +18,7 @@ body {
 	z-index: -1;
 }
 
-.jumbotron {
+#main-jumbotron {
   height: 975px;
   color: white;
   text-shadow: #444 0 1px 1px;

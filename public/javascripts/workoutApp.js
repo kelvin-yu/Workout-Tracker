@@ -110,21 +110,21 @@ app.config(function($routeProvider, $locationProvider, $httpProvider){
 			}
 		})
 		.when('/routines', {
-			templateUrl: 'routine_views/routines.html',
+			templateUrl: 'routine_views/viewRoutine.html',
 			controller: 'routineController',
 			resolve: {
 				loggedin : blockUnauth
 			}
 		})
 		.when('/workouts', {
-			templateUrl: 'workout_views/workouts.html',
+			templateUrl: 'workout_views/viewWorkout.html',
 			controller: 'workoutController',
 			resolve: {
 				loggedin :blockUnauth
 			}
 		})
 		.when('/exercises', {
-			templateUrl: 'exercise_views/exercises.html',
+			templateUrl: 'exercise_views/viewExercise.html',
 			controller: 'exerciseController',
 			resolve: {
 				loggedin :blockUnauth
@@ -151,6 +151,11 @@ app.config(function($routeProvider, $locationProvider, $httpProvider){
 				loggedin :blockUnauth
 			}
 		});
+/*
+		.otherwise({
+			redirectTo : '/'
+		});
+*/
 });
 
 

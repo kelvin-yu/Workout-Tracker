@@ -1,25 +1,44 @@
-<p>name: {{user.name}}</p>
-<div>
-	<h1><a href="/routines">Routines</a></h1>
-	<ol>
-		<li ng-repeat="routine in routines | orderBy:'created_at':true">
-			{{routine.title}}	
-		</li>	
-	</ol>
+<div class="jumbotron" id="home-jumbotron">
+	<div class="container text-center">
+		<img id="profile-img" src="images/profile.jpg" class="img-responsive" alt="profile">
+		<h1>{{user.name}}</h1>	
+	</div>
 </div>
-<div>
-	<h1><a href="/workouts">Workouts</a></h1>
-	<ol>
-		<li ng-repeat="workout in workouts | orderBy:'created_at':true">
-			{{workout.created_at}} | {{workout.routine}}	
-		</li>	
-	</ol>
+
+<div class="container-fluid">
+	<div class="row">
+		<div class="col-md-4" style="padding : 0;">
+			<a href="workouts" class="btn btn-primary"style="background-color: #E14658;width:100%; border-radius: 0;">
+				<i class="fa fa-codepen fa-5x"></i><br/>
+				<h1>Workouts</h1>
+            </a>
+		</div>
+  		<div class="col-md-4" style="padding : 0;">
+			<a href="/routines" class="btn btn-primary" style="background-color: #22252C;width:100%; border-radius: 0;">
+				<i class="fa fa-book fa-5x" aria-hidden="true"></i><br/>
+				<h1>Routines</h1>           
+		   	</a>
+		</div>
+  		<div class="col-md-4" style="padding : 0;">
+			<a href="/stats" class="btn btn-primary"style="background-color: #3F3250; width:100%; border-radius: 0;">
+				<i class="fa fa-line-chart fa-5x" aria-hidden="true"></i><br/>
+				<h1>Graphs</h1>
+            </a>
+		</div>
+	</div>
 </div>
-<div>
-	<h1><a href="/exercises">Exercises</a></h1>
-	<ol>
-		<li ng-repeat="exercise in exercises | orderBy:'created_at':true">
-			{{exercise.name}}
-		</li>
-	</ol>
+
+<div class="container">
+	<div>
+		<h1>Routines</h1>
+		<div ng-include="'/routine_views/routines.html'"></div>
+	</div>
+	<div>
+		<h1>Workouts</h1>
+		<div ng-include="'/workout_views/workouts.html'"></div>
+	</div>
+	<div>
+		<h1>Exercises</h1>
+		<div ng-include="'/exercise_views/exercises.html'"></div>
+	</div>
 </div>
