@@ -1,5 +1,18 @@
-<ol class="list-group">
-	<li class="list-group-item" ng-repeat="exercise in exercises | orderBy:'created_at':true">
-		{{exercise.name}}
-	</li>
-</ol>
+<div class="panel-group" id="accordion">
+	<div ng-repeat="exercise in exercises | orderBy:'created_at':true" class="panel panel-default">
+		<div class="panel-heading">
+			<h4 class="panel-title">
+				<a ng-click="expand(exercise)"href=""data-toggle="collapse" data-parent="#accordion" data-target="#collapse-exer-{{$index}}">{{exercise.name}}</a>
+			</h4>
+		</div>
+		<div id="collapse-exer-{{$index}}" class="panel-collapse collapse">
+			<div class="panel-body">
+				<p>Title: {{selectedExercise.name}}</p>
+				<p>Muscles Worked</p>
+				<div ng-repeat="muscle in selectedExercise.muscles_worked">
+					<p>{{muscle}}</p>	
+				</div>
+			</div>
+		</div>
+	</div>
+</div>

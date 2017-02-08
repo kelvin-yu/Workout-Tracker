@@ -5,7 +5,12 @@ img {
     display: block;
     margin: 0 auto;
 }
-.btn:focus, .btn:active:focus, .btn.active:focus{
-    outline:none;
-    box-shadow:none;
+
+.panel-heading {
+	padding : 0;
+}
+
+.panel-title a {
+	display : block;
+	padding : 10px 15px;
 }

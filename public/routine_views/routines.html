@@ -1,5 +1,17 @@
-<ol class="list-group">
-	<li class="list-group-item" ng-repeat="routine in routines | orderBy:'created_at':true">
-		{{routine.title}}	
-	</li>
-</ol>
+<div class="panel-group" id="accordion">
+	<div ng-repeat="routine in routines | orderBy:'created_at':true" class="panel panel-default">
+		<div class="panel-heading">
+			<h4 class="panel-title">
+				<a ng-click="expand(routine)"href=""data-toggle="collapse" data-parent="#accordion" data-target="#collapse-rou-{{$index}}">{{routine.title}}</a>
+			</h4>
+		</div>
+		<div id="collapse-rou-{{$index}}" class="panel-collapse collapse">
+			<div class="panel-body">
+				<p>Title: {{selectedRoutine.title}}</p>
+				<p>Creator: {{selectedRoutine.creator}}</p>
+				<p>Created at: {{selectedRoutine.created_at}}</p>
+				<p>Exercises: {{selectedRoutine.exercises}}</p>
+			</div>
+		</div>
+	</div>
+</div>
