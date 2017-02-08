@@ -8,3 +8,4 @@ Create a directory called "config" containing "secrets.js" as a module specifyin
 ```
 npm start
 ```
+Check it out at www.kelvin-yu.com
